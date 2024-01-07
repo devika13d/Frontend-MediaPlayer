@@ -10,7 +10,7 @@ function Videocard({ displayVideo, setDeleteVideoStatus }) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = async() => {
+    const handleShow = async () => {
         setShow(true);
         //3 data nee d to be inserted 1.caption 2.link 3.timestamp
         const { caption, embededLink } = displayVideo;
@@ -24,22 +24,26 @@ function Videocard({ displayVideo, setDeleteVideoStatus }) {
             second: '2-digit'
         }).format(today)
         console.log(timeStamp);
-        let videoDetails={
-            caption:caption,
-            embededLink:embededLink,
-            timeStamp:timeStamp
+        let videoDetails = {
+            caption: caption,
+            embededLink: embededLink,
+            timeStamp: timeStamp
         }
         await addToHistory(videoDetails)
     }
-
+    console.log('1');
     console.log(displayVideo);
     const removeVideo = async (id) => {
         const response = await deleteVideo(id);
         setDeleteVideoStatus(true)
     }
+    const dragStarted = (e, id) => {
+        console.log(`started dragging of video with id ${id}`);
+        e.dataTransfer.setData("VideoID", id)
+    }
     return (
         <>
-            <Card style={{ width: '18rem', height: '350px' }} onClick={handleShow}>
+            <Card style={{ width: '18rem', height: '350px' }} onClick={handleShow} draggable onDragStart={(e) => dragStarted(e, displayVideo?.id)}>
                 <Card.Img variant="top" height="300px" width="100%" src={displayVideo.url} />
                 <Card.Body>
                     <div className='d-flex align-items-center justify-content-evenly'>
